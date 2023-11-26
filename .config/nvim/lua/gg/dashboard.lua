@@ -19,14 +19,8 @@ db.setup({
             "",
             }, --your header
         center = {
-            -- {
-            -- 	icon = "  ",
-            -- 	desc = "Recent sessions                         ",
-            -- 	action = "SessionLoad",
-            -- 	shortcut = "<LEADER> s l",
-            -- },
             {
-                icon = "                      ",
+                icon = "                       ",
                 desc = "Find recent files                       ",
                 action = "Telescope oldfiles",
                 shortcut = "<LEADER> f r",
@@ -58,8 +52,7 @@ db.setup({
         },
         -- preview_file_height = 11,
         -- preview_file_width = 70,
-        session_directory = "/Users/rainyugg/.config/nvim/session",
-        footer = {"🪡🧵🪵🈹" }  --your footer
+        footer = {"Have a nice day!"}  -- 🪡🧵🪵🈹your footer
     }
 })
 
