@@ -1,4 +1,6 @@
 # common alias
+alias nr='npm run'
+alias re='exec $SHELL'
 alias bat='batcat'
 alias cat='batcat'
 alias rr='clear'
@@ -7,6 +9,11 @@ alias vimdiff='nvim -d'
 alias lg='lazygit'
 alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
 
+# Home and End Key
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
 
 # lf file manager
 # lfcd() {
