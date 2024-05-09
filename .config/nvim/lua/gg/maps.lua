@@ -23,7 +23,7 @@ map("n", "<leader>ft", "<CMD>Telescope buffers<CR>")
 
 -- Keybindings for NeoTree
 map("n", "<F2>", "<CMD>Neotree toggle<CR>")
-map("n", "<F3>", "<CMD>Neotree git_status toggle <CR>")
+map("n", "<F3>", "<CMD>Neotree float git_status toggle <CR>")
 map("n", "<F4>", "<CMD>Neotree buffers toggle <CR>")
 map("n", "<F5>", "<CMD>Neotree document_symbols toggle<CR>")
 

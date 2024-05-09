@@ -38,10 +38,6 @@ o.softtabstop = -1 -- If negative, shiftwidth value is used
 o.list = true
 o.listchars = "trail:·,nbsp:◇,tab:→ ,extends:▸,precedes:◂"
 
-o.background ='dark'
-o.t_Co = 256
-
-
 -- o.listchars = 'eol:¬,space:·,lead: ,trail:·,nbsp:◇,tab:→-,extends:▸,precedes:◂,multispace:···⬝,leadmultispace:│   ,'
 -- o.formatoptions = 'qrn1'
 
@@ -117,9 +113,10 @@ g.tagbar_left = 0
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
+o.background ='dark'
 -- set termguicolors to enable highlight groups
-o.t_Co = 256
 if vim.env.TERM_PROGRAM == "Apple_Terminal" then
+    o.t_Co = 256
     -- gruvbox setting
     vim.cmd([[colorscheme gruvbox]])
     -- autocmd("vimenter", {
@@ -130,15 +127,4 @@ if vim.env.TERM_PROGRAM == "Apple_Terminal" then
     -- })
 else 
     vim.opt.termguicolors = true
-    vim.cmd[[colorscheme gruvbox-baby]]
 end
-
-require("nvim-tree").setup({
-    sort_by = "case_sensitive",
-    renderer = {
-      group_empty = true,
-    },
-    filters = {
-      dotfiles = true,
-    },
-})

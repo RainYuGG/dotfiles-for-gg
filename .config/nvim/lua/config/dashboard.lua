@@ -52,7 +52,7 @@ db.setup({
         },
         -- preview_file_height = 11,
         -- preview_file_width = 70,
-        footer = {"Have a nice day!"}  -- 🪡🧵🪵🈹your footer
+        footer = {"Have a nice day!🪡🧵🪵🈹"}  -- 🪡🧵🪵🈹your footer
     }
 })
 

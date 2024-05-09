@@ -4,26 +4,31 @@ if not vim.loop.fs_stat(lazypath) then
         "git",
         "clone",
         "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git"
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
         lazypath,
     })
 end
 vim.opt.rtp:prepend(lazypath)
 
 local plugin_specs = {
-  
     -- Gruvbox Colorscheme
     {
-        "morhetz/gruvbox",
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000,
+        config = true,
+        config = function()
+            require("gruvbox").setup({})
+            vim.cmd("colorscheme gruvbox")
+        end
     },
-
     {
         "luisiacc/gruvbox-baby",
         lazy = false, -- make sure we load this during startup if it is your main colorscheme
         priority = 1000, -- make sure to load this before all the other start plugins
-        config = function()
-            require "config.gruvbox-baby"
-        end
+        -- config = function()
+        --     require "config.gruvbox-baby"
+        -- end
     },
   
     -- Dashboard is a nice start screen for nvim
@@ -38,7 +43,7 @@ local plugin_specs = {
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
-        branch = "0.1.5",
+        tag = "0.1.6",
         dependencies  = { 
             {"nvim-lua/plenary.nvim"},
             {"nvim-telescope/telescope-live-grep-args.nvim"},
@@ -53,12 +58,12 @@ local plugin_specs = {
     -- Treesitter Syntax Highlighting
     {
         "nvim-treesitter/nvim-treesitter",
-        -- dependencies = {
-        --     "nvim-treesitter/nvim-treesitter-refactor",
-        --     "RRethy/nvim-treesitter-textsubjects",
-        --     "RRethy/nvim-treesitter-endwise",
-        --     "windwp/nvim-ts-autotag",
-        -- },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-refactor",
+            "RRethy/nvim-treesitter-textsubjects",
+            "RRethy/nvim-treesitter-endwise",
+            "windwp/nvim-ts-autotag",
+        },
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
         config = function()
@@ -90,12 +95,12 @@ local plugin_specs = {
     },
 
     -- Language server
-    {
-        "neovim/nvim-lspconfig",
-        config = function()
-            require "config.lsp"
-        end
-    },
+    -- {
+    --     "neovim/nvim-lspconfig",
+    --     config = function()
+    --         require "config.lsp"
+    --     end
+    -- },
   
     {
         "L3MON4D3/LuaSnip",
@@ -104,22 +109,22 @@ local plugin_specs = {
         -- build = "make install_jsregexp"
     },
 
-    {
-        "hrsh7th/nvim-cmp",
-        event = "VeryLazy",
-        dependencies = {
-            "neovim/nvim-lspconfig",
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
-            "saadparwaiz1/cmp_luasnip",
-            "L3MON4D3/LuaSnip"
-        },
-        config = function()
-            require "config.cmp"
-        end
-    },
+    -- {
+    --     "hrsh7th/nvim-cmp",
+    --     event = "VeryLazy",
+    --     dependencies = {
+    --         "neovim/nvim-lspconfig",
+    --         "hrsh7th/cmp-nvim-lsp",
+    --         "hrsh7th/cmp-buffer",
+    --         "hrsh7th/cmp-path",
+    --         "hrsh7th/cmp-cmdline",
+    --         "saadparwaiz1/cmp_luasnip",
+    --         "L3MON4D3/LuaSnip"
+    --     },
+    --     config = function()
+    --         require "config.cmp"
+    --     end
+    -- },
 
     {
         "roobert/tailwindcss-colorizer-cmp.nvim",
@@ -208,9 +213,9 @@ local plugin_specs = {
         end,
         cmd = "Neotree",
         event = "User EditingDirectory",
-        config = function()
-            require "config.neotree"
-        end,
+        -- config = function()
+        --     require "config.neotree"
+        -- end,
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons",
@@ -222,18 +227,38 @@ local plugin_specs = {
         "vimwiki/vimwiki"
     },
 
-    {
-        "dinhhuy258/git.nvim",
-        config = function()
-            require "config/git"
-        end
-    },
+    -- {
+    --     "dinhhuy258/git.nvim",
+    --     config = function()
+    --         require "config/git"
+    --     end
+    -- },
 
     {
         "preservim/tagbar",
         event = "BufReadPost",
-    },	--tagbar
-    -- {"ryanoasis/vim-devicons"}
+    },	
+    --tagbar 
+    --{"ryanoasis/vim-devicons"},
+
+    {
+      "christoomey/vim-tmux-navigator",
+      cmd = {
+        "TmuxNavigateLeft",
+        "TmuxNavigateDown",
+        "TmuxNavigateUp",
+        "TmuxNavigateRight",
+        "TmuxNavigatePrevious",
+      },
+      keys = {
+        { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+        { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+        { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+        { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+        { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+      },
+    }
 }
+
 
 require("lazy").setup(plugin_specs, opts)
