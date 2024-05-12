@@ -1,64 +1,24 @@
-# common alias
-alias nr='npm run'
-alias re='exec $SHELL'
-alias bat='batcat'
-alias cat='batcat'
-alias rr='clear'
-alias vim='nvim'
-alias vimdiff='nvim -d'
-alias lg='lazygit'
-alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
+#MacOS VS Code PATH
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH=/opt/homebrew/bin:$PATH
 
-# Home and End Key
-bindkey "^[[1~" beginning-of-line
-bindkey "^[[4~" end-of-line
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
-
-# lf file manager
-# lfcd() {
-#     tmp="$(mktemp)"
-#     lf -last-dir-path="$tmp" "$@"
-#     if [ -f "$tmp" ]; then
-#         dir="$(cat "$tmp")"
-#         rm -f "$tmp"
-#         cd "$dir" || return 1
-#     fi
-# }
-
-## MacOS setting 
-#eval $(thefuck --alias)
-### VS Code PATH
-#export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-#export PATH=/opt/homebrew/bin:$PATH
-#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-## Windows open command
-# alias open='explorer.exe'
-
-# Ubuntu open command
-alias open='xdg-open'
-
-# Ubuntu server setting
-## Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-## Initialization code that may require console input (password prompts, [y/n]
-## confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# common setting
-export TERM="xterm-256color"
-# git-fuzzy
+#git
 export PATH="$HOME/dotfiles/git-fuzzy/bin:$PATH"
 
-# node
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# --------------------------------------------------------------------------
-#
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# export TERM="screen-256color"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -72,9 +32,9 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # ZSH_THEME="robbyrussell"
 # ZSH_THEME="avit"
-ZSH_THEME="gruvbox"
+# ZSH_THEME="gruvbox"
 # SOLARIZED_THEME="dark"
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -165,4 +125,48 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+lfcd() {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        cd "$dir" || return 1
+    fi
+}
+
+# keybinding for Home, End, and Alt+Arrow keys
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
+eval "$(thefuck --alias)"
+eval "$(zoxide init zsh)"
+alias rr='clear'
+alias re='exec $SHELL'
+alias vim='nvim'
+alias ac='conda activate'
+alias de='conda deactivate'
+alias diff='delta'
+alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
+alias gcol='git branch --sort=-committerdate | fzf | xargs git checkout'
+alias so='source $HOME/.zshrc'
+
