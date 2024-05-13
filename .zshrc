@@ -159,6 +159,7 @@ bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
 eval "$(thefuck --alias)"
+eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 alias rr='clear'
 alias re='exec $SHELL'
