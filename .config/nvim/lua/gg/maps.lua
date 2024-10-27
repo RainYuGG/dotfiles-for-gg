@@ -53,3 +53,5 @@ map("n", "<leader>9", "<CMD>BufferLineGoToBuffer 9<CR>")
 map('n', 'K', vim.lsp.buf.hover)
 map('n', 'df', vim.lsp.buf.definition)
 map({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action)
+
+map("n", "<leader>fo", vim.lsp.buf.format)

@@ -16,12 +16,12 @@ local plugin_specs = {
     {
         "ellisonleao/gruvbox.nvim",
         priority = 1000,
-        config = true,
         config = function()
             require("gruvbox").setup({})
             vim.cmd("colorscheme gruvbox")
-        end
+        end,
     },
+
     {
         "luisiacc/gruvbox-baby",
         lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -30,31 +30,31 @@ local plugin_specs = {
         --     require "config.gruvbox-baby"
         -- end
     },
-  
+
     -- Dashboard is a nice start screen for nvim
     {
         "nvimdev/dashboard-nvim",
-        lazy=false,
+        lazy = false,
         config = function()
-            require "config.dashboard"
-        end
+            require("config.dashboard")
+        end,
     },
-  
+
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.6",
-        dependencies  = { 
-            {"nvim-lua/plenary.nvim"},
-            {"nvim-telescope/telescope-live-grep-args.nvim"},
-            {"nvim-telescope/telescope-file-browser.nvim"},
-            {"nvim-telescope/telescope-ui-select.nvim"},
+        dependencies = {
+            { "nvim-lua/plenary.nvim" },
+            { "nvim-telescope/telescope-live-grep-args.nvim" },
+            { "nvim-telescope/telescope-file-browser.nvim" },
+            { "nvim-telescope/telescope-ui-select.nvim" },
         },
         config = function()
-            require "config.telescope"
-        end
+            require("config.telescope")
+        end,
     },
-  
+
     -- Treesitter Syntax Highlighting
     {
         "nvim-treesitter/nvim-treesitter",
@@ -67,18 +67,18 @@ local plugin_specs = {
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
         config = function()
-            require "config.treesitter"
-        end
+            require("config.treesitter")
+        end,
     },
-  
-   {
+
+    {
         "rcarriga/nvim-notify",
         opts = {
             background_colour = "#000000",
         },
     },
 
-   {
+    {
         "folke/noice.nvim",
         event = "VeryLazy",
         dependencies = {
@@ -87,24 +87,59 @@ local plugin_specs = {
             -- OPTIONAL:
             --   `nvim-notify` is only needed, if you want to use the notification view.
             --   If not available, we use `mini` as the fallback
-             "rcarriga/nvim-notify",
+            "rcarriga/nvim-notify",
         },
         config = function()
-            require "config.noice"
-        end
+            require("config.noice")
+        end,
     },
 
     -- Language server
-    -- {
-    --     "neovim/nvim-lspconfig",
-    --     config = function()
-    --         require "config.lsp"
-    --     end
-    -- },
-  
+    {
+        "neovim/nvim-lspconfig",
+    },
+
+    {
+        "williamboman/mason.nvim",
+        config = function()
+            require("mason").setup()
+        end,
+    },
+
+    {
+        "williamboman/mason-lspconfig.nvim",
+        -- "neovim/nvim-lspconfig",
+        config = function()
+            require("mason-lspconfig").setup({
+                ensure_installed = { "lua_ls" },
+            })
+            require("mason-lspconfig").setup_handlers({
+                -- The first entry (without a key) will be the default handler
+                -- and will be called for each installed server that doesn't have
+                -- a dedicated handler.
+                function(server_name) -- default handler (optional)
+                    require("lspconfig")[server_name].setup({})
+                end,
+                -- Next, you can provide a dedicated handler for specific servers.
+                -- For example, a handler override for the `lua_ls`:
+                ["lua_ls"] = function()
+                    require("lspconfig").lua_ls.setup({
+                        settings = {
+                            Lua = {
+                                diagnostics = {
+                                    globals = { "vim" },
+                                },
+                            },
+                        },
+                    })
+                end,
+            })
+        end,
+    },
+
     {
         "L3MON4D3/LuaSnip",
-        opt = {}
+        opt = {},
         -- install jsregexp (optional!).
         -- build = "make install_jsregexp"
     },
@@ -129,18 +164,18 @@ local plugin_specs = {
     {
         "roobert/tailwindcss-colorizer-cmp.nvim",
         -- optionally, override the default options:
-         config = function()
-          require("tailwindcss-colorizer-cmp").setup({
-            color_square_width = 2,
-          })
-        end
+        config = function()
+            require("tailwindcss-colorizer-cmp").setup({
+                color_square_width = 2,
+            })
+        end,
     },
 
     {
         "altermo/ultimate-autopair.nvim",
-        event={"InsertEnter","CmdlineEnter"},
-        branch="v0.6", --recomended as each new version will have breaking changes
-        opts={
+        event = { "InsertEnter", "CmdlineEnter" },
+        branch = "v0.6", --recomended as each new version will have breaking changes
+        opts = {
             --Config goes here
         },
     },
@@ -148,8 +183,40 @@ local plugin_specs = {
     {
         "nvimtools/none-ls.nvim",
         dependencies = {
-            "nvim-lua/plenary.nvim"
-        }
+            "nvim-lua/plenary.nvim",
+            "nvimtools/none-ls-extras.nvim",
+        },
+        config = function()
+            local null_ls = require("null-ls")
+            null_ls.setup({
+                sources = {
+                    null_ls.builtins.formatting.stylua,
+                    null_ls.builtins.completion.spell,
+                    require("none-ls.diagnostics.eslint"), -- requires none-ls-extras.nvim
+                },
+            })
+        end,
+    },
+
+    {
+        "jay-babu/mason-null-ls.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            "williamboman/mason.nvim",
+            "nvimtools/none-ls.nvim",
+        },
+        config = function()
+            -- local null_ls = require("null-ls")
+            require("mason-null-ls").setup({
+                ensure_installed = { "stylua", "jq" },
+                -- handlers = {
+                -- function() end, -- disables automatic setup of all null-ls sources
+                -- stylua = function(source_name, methods)
+                --     null_ls.register(null_ls.builtins.formatting.stylua)
+                -- end,
+                -- },
+            })
+        end,
     },
 
     -- Quick Comment
@@ -163,10 +230,10 @@ local plugin_specs = {
             require("Comment").setup({
                 pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
             })
-        end
+        end,
     },
 
--- Which Key
+    -- Which Key
     {
         "folke/which-key.nvim",
         event = "VeryLazy",
@@ -178,7 +245,7 @@ local plugin_specs = {
             -- your configuration comes here
             -- or leave it empty to use the default settings
             -- refer to the configuration section below
-        }
+        },
     },
 
     -- Bufferline
@@ -189,10 +256,10 @@ local plugin_specs = {
         config = function()
             require("bufferline").setup({
                 options = {
-                    numbers = "ordinal"
-                }
+                    numbers = "ordinal",
+                },
             })
-        end
+        end,
     },
 
     -- lualine (A better statusline)
@@ -200,8 +267,8 @@ local plugin_specs = {
         "nvim-lualine/lualine.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
-            require("lualine").setup ()
-        end 
+            require("lualine").setup()
+        end,
     },
 
     -- -- File management --
@@ -224,7 +291,7 @@ local plugin_specs = {
     },
 
     {
-        "vimwiki/vimwiki"
+        "vimwiki/vimwiki",
     },
 
     -- {
@@ -237,28 +304,27 @@ local plugin_specs = {
     {
         "preservim/tagbar",
         event = "BufReadPost",
-    },	
-    --tagbar 
+    },
+    --tagbar
     --{"ryanoasis/vim-devicons"},
 
     {
-      "christoomey/vim-tmux-navigator",
-      cmd = {
-        "TmuxNavigateLeft",
-        "TmuxNavigateDown",
-        "TmuxNavigateUp",
-        "TmuxNavigateRight",
-        "TmuxNavigatePrevious",
-      },
-      keys = {
-        { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-        { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-        { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-        { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-        { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-      },
-    }
+        "christoomey/vim-tmux-navigator",
+        cmd = {
+            "TmuxNavigateLeft",
+            "TmuxNavigateDown",
+            "TmuxNavigateUp",
+            "TmuxNavigateRight",
+            "TmuxNavigatePrevious",
+        },
+        keys = {
+            { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+            { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+            { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+            { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+        },
+    },
 }
 
-
-require("lazy").setup(plugin_specs, opts)
+require("lazy").setup(plugin_specs)
