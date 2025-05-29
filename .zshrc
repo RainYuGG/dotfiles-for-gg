@@ -1,4 +1,8 @@
 # common alias
+alias diff='delta'
+alias fd='fdfind'
+alias re='exec $SHELL'
+alias so='source ~/.zshrc; tmux source ~/.tmux.conf'
 alias nr='npm run'
 alias re='exec $SHELL'
 alias bat='batcat'
@@ -7,7 +11,27 @@ alias rr='clear'
 alias vim='nvim'
 alias vimdiff='nvim -d'
 alias lg='lazygit'
+alias python='python3'
+alias py='python3'
+alias dk='docker'
+
+# npm
+[ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash
+alias nr='npm run'
+
+# git
 alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
+alias gpfwl='git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias gcfd='git clean -fd'
+alias gco='function mygco() { if [ "$#" -eq 0 ]; then git branch --sort=-committerdate | grep -v "*" | fzf --header "Checkout Recent Branch. current branch: $(git rev-parse --abbrev-ref HEAD)" --preview "git diff {1} --color=always" --preview-window top  | xargs git checkout; else git checkout "$@"; fi }; mygco'
+
+# kubectl
+[ -f ~/.kube-completion.bash ] && source ~/.kube-completion.bash
+alias k='kubectl'
+alias kgp='kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf'
+alias kcp='function mykcp() { if [ "$#" -eq 1 ]; then kubectl cp $1 $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf):/tmp/. ; else kubectl cp "$@"; fi}; mykcp'
+alias kpod='kubectl exec -it $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf) -- /bin/bash'
 
 # Home and End Key
 bindkey "^[[1~" beginning-of-line
@@ -166,3 +190,17 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --border --margin=1 --padding=1 --color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
+
+export JAVA_HOME="$(dirname $(dirname $(readlink -f $(which java))))"
+
+# zoxide
+_ZO_DATA_DIR='$HOME/.local/shar'
+_ZO_ECHO='1'
+eval "$(zoxide init --cmd cd zsh)"
+
+# the fuck
+eval "$(thefuck --alias)"
