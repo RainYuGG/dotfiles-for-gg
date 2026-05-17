@@ -180,44 +180,44 @@ local plugin_specs = {
         },
     },
 
-    {
-        "nvimtools/none-ls.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvimtools/none-ls-extras.nvim",
-        },
-        config = function()
-            local null_ls = require("null-ls")
-            null_ls.setup({
-                sources = {
-                    null_ls.builtins.formatting.stylua,
-                    null_ls.builtins.completion.spell,
-                    require("none-ls.diagnostics.eslint"), -- requires none-ls-extras.nvim
-                },
-            })
-        end,
-    },
-
-    {
-        "jay-babu/mason-null-ls.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "nvimtools/none-ls.nvim",
-        },
-        config = function()
-            -- local null_ls = require("null-ls")
-            require("mason-null-ls").setup({
-                ensure_installed = { "stylua", "jq" },
-                -- handlers = {
-                -- function() end, -- disables automatic setup of all null-ls sources
-                -- stylua = function(source_name, methods)
-                --     null_ls.register(null_ls.builtins.formatting.stylua)
-                -- end,
-                -- },
-            })
-        end,
-    },
+    -- {
+    --     "nvimtools/none-ls.nvim",
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --         "nvimtools/none-ls-extras.nvim",
+    --     },
+    --     config = function()
+    --         local null_ls = require("null-ls")
+    --         null_ls.setup({
+    --             sources = {
+    --                 null_ls.builtins.formatting.stylua,
+    --                 null_ls.builtins.completion.spell,
+    --                 require("none-ls.diagnostics.eslint"), -- requires none-ls-extras.nvim
+    --             },
+    --         })
+    --     end,
+    -- },
+    --
+    -- {
+    --     "jay-babu/mason-null-ls.nvim",
+    --     event = { "BufReadPre", "BufNewFile" },
+    --     dependencies = {
+    --         "williamboman/mason.nvim",
+    --         "nvimtools/none-ls.nvim",
+    --     },
+    --     config = function()
+    --         -- local null_ls = require("null-ls")
+    --         require("mason-null-ls").setup({
+    --             ensure_installed = { "stylua", "jq" },
+    --             -- handlers = {
+    --             -- function() end, -- disables automatic setup of all null-ls sources
+    --             -- stylua = function(source_name, methods)
+    --             --     null_ls.register(null_ls.builtins.formatting.stylua)
+    --             -- end,
+    --             -- },
+    --         })
+    --     end,
+    -- },
 
     -- Quick Comment
     {
