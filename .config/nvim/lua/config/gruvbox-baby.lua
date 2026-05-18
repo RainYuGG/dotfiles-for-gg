@@ -7,7 +7,7 @@ vim.g.gruvbox_baby_keyword_style = "italic"
 -- ColorGroup = {fg = "foreground color", bg = "background_color", style = "some_style(:h attr-list)"}
 -- See also :h highlight-guifg
 -- Example:
-vim.g.gruvbox_baby_highlights = {Normal = {fg = "#123123", bg = "NONE", style="underline"}}
+vim.g.gruvbox_baby_highlights = { Normal = { fg = "#123123", bg = "NONE", style = "underline" } }
 
 -- Enable telescope theme
 vim.g.gruvbox_baby_telescope_theme = 1
@@ -16,4 +16,4 @@ vim.g.gruvbox_baby_telescope_theme = 1
 vim.g.gruvbox_baby_transparent_mode = 1
 
 -- Load the colorscheme
-vim.cmd[[colorscheme gruvbox-baby]]
+vim.cmd([[colorscheme gruvbox-baby]])

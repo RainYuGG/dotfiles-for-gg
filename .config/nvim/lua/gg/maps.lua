@@ -1,5 +1,5 @@
 local function map(m, k, v)
-	vim.keymap.set(m, k, v, { silent = true })
+  vim.keymap.set(m, k, v, { silent = true })
 end
 
 -- indent
@@ -50,8 +50,8 @@ map("n", "<leader>8", "<CMD>BufferLineGoToBuffer 8<CR>")
 map("n", "<leader>9", "<CMD>BufferLineGoToBuffer 9<CR>")
 
 -- Keybindings for lsp
-map('n', 'K', vim.lsp.buf.hover)
-map('n', 'df', vim.lsp.buf.definition)
-map({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action)
+map("n", "K", vim.lsp.buf.hover)
+map("n", "df", vim.lsp.buf.definition)
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action)
 
 map("n", "<leader>fo", vim.lsp.buf.format)
