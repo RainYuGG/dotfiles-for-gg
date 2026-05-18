@@ -43,7 +43,6 @@ local plugin_specs = {
   -- Telescope
   {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.6",
     dependencies = {
       { "nvim-lua/plenary.nvim" },
       { "nvim-telescope/telescope-live-grep-args.nvim" },
@@ -176,7 +175,6 @@ local plugin_specs = {
   {
     "altermo/ultimate-autopair.nvim",
     event = { "InsertEnter", "CmdlineEnter" },
-    branch = "v0.6", --recomended as each new version will have breaking changes
     opts = {
       --Config goes here
     },
@@ -276,7 +274,6 @@ local plugin_specs = {
   -- -- File management --
   {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
     init = function()
       vim.g.neo_tree_remove_legacy_commands = true
     end,
