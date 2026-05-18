@@ -1,6 +1,3 @@
-# Genmini API
-export GEMINI_API_KEY=""
-
 #MacOS VS Code PATH
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 export PATH=/opt/homebrew/bin:$PATH
