@@ -18,9 +18,9 @@ git config --global core.editor nvim
 git config --global core.pager delta
 git config --global interactive.diffFilter 'delta --color-only'
 git config --global delta.navigate true
-git config --global delta.light false
+git config --global delta.dark true  # or `delta.light true`, or omit for auto-detection
 git config --global delta.side-by-side true
-git config --global merge.conflictstyle diff3
+git config --global merge.conflictstyle zdiff3
 git config --global diff.colorMoved default
 
 # omz

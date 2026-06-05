@@ -56,20 +56,20 @@ local plugin_specs = {
     },
   
     -- Treesitter Syntax Highlighting
-    {
-        "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-refactor",
-            "RRethy/nvim-treesitter-textsubjects",
-            "RRethy/nvim-treesitter-endwise",
-            "windwp/nvim-ts-autotag",
-        },
-        build = ":TSUpdate",
-        event = { "BufReadPost", "BufNewFile" },
-        config = function()
-            require "config.treesitter"
-        end
-    },
+    -- {
+    --     "nvim-treesitter/nvim-treesitter",
+    --     dependencies = {
+    --         "nvim-treesitter/nvim-treesitter-refactor",
+    --         "RRethy/nvim-treesitter-textsubjects",
+    --         "RRethy/nvim-treesitter-endwise",
+    --         "windwp/nvim-ts-autotag",
+    --     },
+    --     build = ":TSUpdate",
+    --     event = { "BufReadPost", "BufNewFile" },
+    --     config = function()
+    --         require "config.treesitter"
+    --     end
+    -- },
   
    {
         "rcarriga/nvim-notify",
@@ -136,14 +136,14 @@ local plugin_specs = {
         end
     },
 
-    {
-        "altermo/ultimate-autopair.nvim",
-        event={"InsertEnter","CmdlineEnter"},
-        branch="v0.6", --recomended as each new version will have breaking changes
-        opts={
-            --Config goes here
-        },
-    },
+    -- {
+    --     "altermo/ultimate-autopair.nvim",
+    --     event={"InsertEnter","CmdlineEnter"},
+    --     branch="v0.6", --recomended as each new version will have breaking changes
+    --     opts={
+    --         --Config goes here
+    --     },
+    -- },
 
     {
         "nvimtools/none-ls.nvim",
