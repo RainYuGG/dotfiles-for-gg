@@ -25,6 +25,7 @@ alias dk='docker'
 # npm
 [ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash
 alias nr='npm run'
+export PATH=$HOME/.npm-global/bin:$PATH
 
 # git
 alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
@@ -205,7 +206,8 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --border --
 export JAVA_HOME="$(dirname $(dirname $(readlink -f $(which java))))"
 
 # zoxide
-_ZO_DATA_DIR='$HOME/.local/shar'
+export PATH=$HOME/.local/bin:$PATH
+_ZO_DATA_DIR='$HOME/.local/share'
 _ZO_ECHO='1'
 eval "$(zoxide init --cmd cd zsh)"
 

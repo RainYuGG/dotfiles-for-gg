@@ -6,7 +6,7 @@ ln -s $(pwd)/.zshrc ~/.zshrc
 ln -s $(pwd)/.config/nvim ~/.config/nvim
 
 # install packages from apt & snap
-sudo apt install zsh tmux bat autojump universal-ctags xsel font-manager unzip golang-go build-essential ripgrep fd-find thefuck cmatrix tree -y
+sudo apt install zsh tmux bat universal-ctags xclip font-manager unzip build-essential ripgrep fd-find thefuck cmatrix tree -y
 sudo snap install nvim --classic
 sudo snap install helm --classic
 sudo snap install kubectl --classic
@@ -28,6 +28,8 @@ git config --global diff.colorMoved default
 # tpm
 
 # fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 
 # fonts
 
