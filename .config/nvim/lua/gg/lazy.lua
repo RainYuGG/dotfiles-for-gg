@@ -1,5 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -16,7 +16,6 @@ local plugin_specs = {
     {
         "ellisonleao/gruvbox.nvim",
         priority = 1000,
-        config = true,
         config = function()
             require("gruvbox").setup({})
             vim.cmd("colorscheme gruvbox")
@@ -43,7 +42,7 @@ local plugin_specs = {
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
-        tag = "0.1.6",
+        tag = "v0.2.1",
         dependencies  = { 
             {"nvim-lua/plenary.nvim"},
             {"nvim-telescope/telescope-live-grep-args.nvim"},
@@ -155,6 +154,9 @@ local plugin_specs = {
     -- Quick Comment
     {
         "JoosepAlviste/nvim-ts-context-commentstring",
+        opts = {
+            enable_autocmd = false,
+        },
     },
     {
         "numToStr/Comment.nvim",
