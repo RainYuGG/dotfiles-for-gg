@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # set softlinks (force create/update)
 ln -sf $(pwd)/.tmux.conf ~/.tmux.conf
 ln -sf $(pwd)/.zshrc ~/.zshrc
@@ -7,10 +9,19 @@ mkdir -p ~/.config
 ln -sf $(pwd)/.config/nvim ~/.config/nvim
 
 # install packages from apt & snap
-sudo apt update && sudo apt install -y zsh tmux bat universal-ctags xclip font-manager unzip build-essential ripgrep fd-find thefuck cmatrix tree
-sudo snap install nvim --classic || true
-sudo snap install helm --classic || true
-sudo snap install kubectl --classic || true
+sudo apt update && sudo apt install -y zsh tmux bat universal-ctags xclip font-manager unzip build-essential ripgrep fd-find thefuck cmatrix tree gh
+
+# snap packages
+snap_packages=(nvim helm kubectl go)
+for pkg in "${snap_packages[@]}"; do
+    if ! snap list | grep -q "^$pkg "; then
+        echo "Installing $pkg via snap..."
+        sudo snap install "$pkg" --classic
+    else
+        echo "$pkg already installed via snap."
+    fi
+done
+
 kubectl completion zsh > ~/.kube-completion.bash 
 
 # git configure
@@ -22,6 +33,17 @@ git config --global delta.dark true
 git config --global delta.side-by-side true
 git config --global merge.conflictstyle zdiff3
 git config --global diff.colorMoved default
+
+# gh configure
+if command -v gh &> /dev/null; then
+    echo "Configuring GitHub CLI..."
+    gh config set editor nvim
+    gh config set git_protocol ssh
+    # Optional: check authentication
+    if ! gh auth status &> /dev/null; then
+        echo "Tip: You are not logged into GitHub CLI. Run 'gh auth login' to authenticate."
+    fi
+fi
 
 # tpm
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then

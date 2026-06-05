@@ -27,6 +27,9 @@ alias dk='docker'
 alias nr='npm run'
 export PATH=$HOME/.npm-global/bin:$PATH
 
+# go
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
 # git
 alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
 alias gpfwl='git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)'
