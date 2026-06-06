@@ -5,93 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# common alias
-alias diff='delta'
-alias fd='fdfind'
-alias re='exec $SHELL'
-alias so='source ~/.zshrc; tmux source ~/.tmux.conf'
-alias nr='npm run'
-alias re='exec $SHELL'
-alias bat='batcat'
-alias cat='batcat'
-alias rr='clear'
-alias vim='nvim'
-alias vimdiff='nvim -d'
-alias lg='lazygit'
-alias python='python3'
-alias py='python3'
-alias dk='docker'
-
-# npm
-[ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash
-alias nr='npm run'
-export PATH=$HOME/.npm-global/bin:$PATH
-
-# go
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-
-# git
-alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
-alias gpfwl='git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)'
-alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
-alias gcfd='git clean -fd'
-alias gco='function mygco() { if [ "$#" -eq 0 ]; then git branch --sort=-committerdate | grep -v "*" | fzf --header "Checkout Recent Branch. current branch: $(git rev-parse --abbrev-ref HEAD)" --preview "git diff {1} --color=always" --preview-window top  | xargs git checkout; else git checkout "$@"; fi }; mygco'
-
-# kubectl
-[ -f ~/.kube-completion.bash ] && source ~/.kube-completion.bash
-alias k='kubectl'
-alias kgp='kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf'
-alias kcp='function mykcp() { if [ "$#" -eq 1 ]; then kubectl cp $1 $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf):/tmp/. ; else kubectl cp "$@"; fi}; mykcp'
-alias kpod='kubectl exec -it $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf) -- /bin/bash'
-
-# Home and End Key
-bindkey "^[[1~" beginning-of-line
-bindkey "^[[4~" end-of-line
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
-
-# lf file manager
-# lfcd() {
-#     tmp="$(mktemp)"
-#     lf -last-dir-path="$tmp" "$@"
-#     if [ -f "$tmp" ]; then
-#         dir="$(cat "$tmp")"
-#         rm -f "$tmp"
-#         cd "$dir" || return 1
-#     fi
-# }
-
-## MacOS setting 
-#eval $(thefuck --alias)
-### VS Code PATH
-#export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-#export PATH=/opt/homebrew/bin:$PATH
-#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-## Windows open command
-# alias open='explorer.exe'
-
-# Ubuntu open command
-alias open='xdg-open'
-
-# Ubuntu server setting
-## Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-## Initialization code that may require console input (password prompts, [y/n]
-## confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# common setting
-# export TERM="xterm-256color"
-# git-fuzzy
-export PATH="$HOME/dotfiles/git-fuzzy/bin:$PATH"
-
-# node
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # --------------------------------------------------------------------------
 #
 # If you come from bash you might have to change your $PATH.
@@ -169,7 +82,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -202,7 +115,15 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# npm
+[ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash
+alias nr='npm run'
+export PATH=$HOME/.npm-global/bin:$PATH
 
+# go
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
+# fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --border --margin=1 --padding=1 --color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
 
@@ -219,3 +140,93 @@ eval "$(thefuck --alias)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# common alias
+alias diff='delta'
+alias fd='fdfind'
+alias re='exec $SHELL'
+alias so='source ~/.zshrc; tmux source ~/.tmux.conf'
+alias nr='npm run'
+alias re='exec $SHELL'
+alias bat='batcat'
+alias cat='batcat'
+alias rr='clear'
+alias vim='nvim'
+alias vimdiff='nvim -d'
+alias lg='lazygit'
+alias python='python3'
+alias py='python3'
+alias dk='docker'
+
+unalias gco 2>/dev/null
+gco() {
+  if [ "$#" -eq 0 ]; then
+    local branch
+    branch=$(git branch --sort=-committerdate | grep -v "^\*" | fzf --header "Checkout Recent Branch. current branch: $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'none')" --preview "git diff {1} --color=always" --preview-window top)
+    if [ -n "$branch" ]; then
+      git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+    fi
+  else
+    git checkout "$@"
+  fi
+}
+
+# git
+alias glog='git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline'
+alias gpfwl='git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias gcfd='git clean -fd'
+# git-fuzzy
+export PATH="$HOME/dotfiles/git-fuzzy/bin:$PATH"
+
+
+# kubectl
+[ -f ~/.kube-completion.bash ] && source ~/.kube-completion.bash
+alias k='kubectl'
+alias kgp='kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf'
+alias kcp='function mykcp() { if [ "$#" -eq 1 ]; then kubectl cp $1 $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf):/tmp/. ; else kubectl cp "$@"; fi}; mykcp'
+alias kpod='kubectl exec -it $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | fzf) -- /bin/bash'
+
+# Home and End Key
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
+# lf file manager
+# lfcd() {
+#     tmp="$(mktemp)"
+#     lf -last-dir-path="$tmp" "$@"
+#     if [ -f "$tmp" ]; then
+#         dir="$(cat "$tmp")"
+#         rm -f "$tmp"
+#         cd "$dir" || return 1
+#     fi
+# }
+
+## MacOS setting 
+#eval $(thefuck --alias)
+### VS Code PATH
+#export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+#export PATH=/opt/homebrew/bin:$PATH
+#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+## Windows open command
+# alias open='explorer.exe'
+
+# Ubuntu open command
+alias open='xdg-open'
+
+# Ubuntu server setting
+## Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+## Initialization code that may require console input (password prompts, [y/n]
+## confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
+
+# node
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
