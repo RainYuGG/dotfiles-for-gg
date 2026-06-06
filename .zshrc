@@ -83,7 +83,7 @@ alias open='xdg-open'
 # fi
 
 # common setting
-export TERM="xterm-256color"
+# export TERM="xterm-256color"
 # git-fuzzy
 export PATH="$HOME/dotfiles/git-fuzzy/bin:$PATH"
 

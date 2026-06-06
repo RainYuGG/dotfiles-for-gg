@@ -115,16 +115,5 @@ g.loaded_netrwPlugin = 1
 
 o.background ='dark'
 -- set termguicolors to enable highlight groups
-if vim.env.TERM_PROGRAM == "Apple_Terminal" then
-    o.t_Co = 256
-    -- gruvbox setting
-    vim.cmd([[colorscheme gruvbox]])
-    -- autocmd("vimenter", {
-	--     nested = true,
-	--     callback = function()
-	-- 	vim.cmd([[colorscheme gruvbox]])
-	--     end
-    -- })
-else 
-    vim.opt.termguicolors = true
-end
+vim.opt.termguicolors = true
+
