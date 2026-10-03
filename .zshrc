@@ -230,3 +230,17 @@ alias open='xdg-open'
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Clipboard copy
+c() {
+  if [ "$#" -eq 0 ]; then
+    xclip -selection clipboard
+  else
+    xclip -selection clipboard "$@"
+  fi
+}
+alias p='xclip -selection clipboard -o'
+
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/chingyu/.local/bin:$PATH"
