@@ -43,7 +43,7 @@ fi
 unset _shell_os _shell_arch _shell_id _shell_version _shell_line _shell_value _shell_version_pattern
 
 typeset -U path PATH
-path=("$HOME/.local/bin" "$HOME/.npm-global/bin" "$HOME/dotfiles/git-fuzzy/bin" $path /usr/local/go/bin "$HOME/go/bin")
+path=("$HOME/.local/bin" "$HOME/.npm-global/bin" "$HOME/.fzf/bin" "$HOME/dotfiles/git-fuzzy/bin" $path /usr/local/go/bin "$HOME/go/bin")
 typeset -a CLIP_COPY_CMD CLIP_PASTE_CMD
 case "$SHELL_PLATFORM" in
   ubuntu)
@@ -95,34 +95,9 @@ if (( ! $+functions[compdef] )) &&
 fi
 
 if (( $+commands[fzf] )); then
-  if [[ -r "$HOME/.fzf.zsh" ]]; then
-    source "$HOME/.fzf.zsh"
-  else
-    case "$SHELL_PLATFORM" in
-      ubuntu) _shell_fzf_dir=/usr/share/doc/fzf/examples ;;
-      macos) _shell_fzf_dir=/opt/homebrew/opt/fzf/shell ;;
-    esac
-    for _shell_fzf_file in completion.zsh key-bindings.zsh; do
-      if [[ -r "$_shell_fzf_dir/$_shell_fzf_file" ]]; then
-        source "$_shell_fzf_dir/$_shell_fzf_file"
-      fi
-    done
-    unset _shell_fzf_dir _shell_fzf_file
-  fi
+  source <(fzf --zsh)
 fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --border --margin=1 --padding=1 --color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
-if [[ $SHELL_PLATFORM == macos ]] && (( $+commands[fzf] )); then
-  if (( $+commands[fd] )); then
-    export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
-    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
-  fi
-  if (( $+commands[bat] )); then
-    export FZF_CTRL_T_OPTS="--preview 'bat --color=always -- {}'"
-  fi
-  if (( $+commands[tree] )); then
-    export FZF_ALT_C_OPTS="--preview 'tree -C -- {}'"
-  fi
-fi
 
 if (( $+commands[npm] )) && [[ -r "$HOME/.npm-completion.bash" ]]; then
   source "$HOME/.npm-completion.bash"
