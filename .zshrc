@@ -244,3 +244,6 @@ alias p='xclip -selection clipboard -o'
 
 # Added by Antigravity CLI installer
 export PATH="/home/chingyu/.local/bin:$PATH"
+
+# AI Agent
+alias oc='opencode'
