@@ -43,7 +43,7 @@ fi
 unset _shell_os _shell_arch _shell_id _shell_version _shell_line _shell_value _shell_version_pattern
 
 typeset -U path PATH
-path=("$HOME/.local/bin" "$HOME/.npm-global/bin" "$HOME/.fzf/bin" "$HOME/dotfiles/git-fuzzy/bin" $path /usr/local/go/bin "$HOME/go/bin")
+path=("$HOME/.local/bin" "$HOME/.npm-global/bin" "$HOME/.bun/bin" "$HOME/.fzf/bin" "$HOME/dotfiles/git-fuzzy/bin" $path /usr/local/go/bin "$HOME/go/bin")
 typeset -a CLIP_COPY_CMD CLIP_PASTE_CMD
 case "$SHELL_PLATFORM" in
   ubuntu)

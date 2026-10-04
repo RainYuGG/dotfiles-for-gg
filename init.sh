@@ -42,6 +42,16 @@ if [[ "$PLATFORM" == "ubuntu" ]]; then
     sudo apt install -y \
         zsh tmux bat universal-ctags xclip unzip build-essential \
         ripgrep fd-find zoxide thefuck cmatrix tree gh ca-certificates curl gnupg
+
+    # Ubuntu package names conflict resolution: fd-find installs as 'fdfind', bat as 'batcat'
+    if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+        echo "Creating symlink for fd (/usr/local/bin/fd -> $(which fdfind))..."
+        sudo ln -sf "$(which fdfind)" /usr/local/bin/fd
+    fi
+    if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+        echo "Creating symlink for bat (/usr/local/bin/bat -> $(which batcat))..."
+        sudo ln -sf "$(which batcat)" /usr/local/bin/bat
+    fi
 elif [[ "$PLATFORM" == "macos" ]]; then
     if ! command -v brew >/dev/null 2>&1; then
         if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -56,7 +66,7 @@ elif [[ "$PLATFORM" == "macos" ]]; then
     echo "Installing macOS packages via Homebrew..."
     brew install \
         tmux bat universal-ctags unzip ripgrep fd thefuck cmatrix tree gh \
-        neovim helm kubernetes-cli go git-delta fzf zoxide node@22
+        neovim helm kubernetes-cli go git-delta fzf zoxide node@22 tree-sitter-cli
 fi
 
 # ------------------------------------------------------------------------------
@@ -90,6 +100,15 @@ fi
 
 mkdir -p "$HOME/.npm-global"
 npm config set prefix "$HOME/.npm-global"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+if ! command -v bun >/dev/null 2>&1; then
+    echo "Installing bun via npm..."
+    npm install -g --allow-scripts=bun bun
+else
+    echo "bun is already installed."
+fi
+export PATH="$HOME/.bun/bin:$PATH"
 
 # ------------------------------------------------------------------------------
 # 5. Install git-delta
