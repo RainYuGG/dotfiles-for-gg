@@ -27,10 +27,12 @@ echo "Platform: $PLATFORM, Architecture: $DETECTED_ARCH"
 # ------------------------------------------------------------------------------
 echo "==> [2/8] Creating dotfiles symlinks..."
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/git"
 ln -snf "$REPO_ROOT/.tmux.conf" "$HOME/.tmux.conf"
 ln -snf "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
 ln -snf "$REPO_ROOT/.config/nvim" "$HOME/.config/nvim"
-echo "Symlinks created (.tmux.conf, .zshrc, .config/nvim)"
+ln -snf "$REPO_ROOT/.config/git/ignore" "$HOME/.config/git/ignore"
+echo "Symlinks created (.tmux.conf, .zshrc, .config/nvim, .config/git/ignore)"
 
 # ------------------------------------------------------------------------------
 # 3. Install Base Packages via Package Manager (APT / Homebrew)
@@ -196,6 +198,7 @@ echo "==> [8/8] Configuring Git, GitHub CLI, Kubectl, and Neovim..."
 
 # Git config
 git config --global core.editor nvim
+git config --global core.excludesfile "$HOME/.config/git/ignore"
 git config --global merge.conflictstyle diff3
 git config --global diff.colorMoved default
 if command -v delta >/dev/null 2>&1; then
