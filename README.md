@@ -1,4 +1,4 @@
-# dotfiles-for-gg
+# dotfiles
 
 個人現代化跨平台終端開發環境設定，支援 **Ubuntu (Linux)** 與 **macOS (Darwin)**。
 
@@ -47,8 +47,8 @@
 
 ```bash
 # 1. 複製倉庫
-git clone https://github.com/your-username/dotfiles-for-gg.git ~/dotfiles-for-gg
-cd ~/dotfiles-for-gg
+git clone https://github.com/RainYuGG/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 
 # 2. 執行安裝腳本（Ubuntu 僅需於開頭互動輸入一次 sudo 密碼，全程自動背景保活）
 ./init.sh
@@ -89,7 +89,7 @@ exec zsh
   ```
   OpenCode 啟動時即可無縫透過 `{env:LOCAL_SERVER_API_KEY}` 取得憑證。
 * **Git 自動過濾（Clean Filter）**：
-  透過 [.gitattributes](file:///home/chingyu/dotfiles-for-gg/.gitattributes) 與 Git 的 `clean-secrets` 過濾器，任何時候 Git 執行暫存（`git add`）或提交（`git commit`）時，系統會自動將金鑰過濾為空字串：
+  透過 [.gitattributes](.gitattributes) 與 Git 的 `clean-secrets` 過濾器，任何時候 Git 執行暫存（`git add`）或提交（`git commit`）時，系統會自動將金鑰過濾為空字串：
   ```bash
   export LOCAL_SERVER_API_KEY=""
   ```
@@ -132,7 +132,7 @@ exec zsh
 ## 專案目錄結構
 
 ```text
-dotfiles-for-gg/
+dotfiles/
 ├── .config/
 │   ├── git/
 │   │   ├── hooks/
