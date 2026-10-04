@@ -1,3 +1,6 @@
 # Global git ignore
 .omo
 .omp
+*.local
+.env
+.env.*

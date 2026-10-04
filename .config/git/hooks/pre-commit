@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Global Git Pre-Commit Hook
+# Prevents accidental commits of secrets, API keys, and sensitive credentials
+# ==============================================================================
+
+# 1. Dedicated check: Ensure LOCAL_SERVER_API_KEY in .zshrc is empty in staged changes
+if git diff --cached -U0 -- .zshrc 2>/dev/null | grep -E '^\+[[:space:]]*export LOCAL_SERVER_API_KEY="[^"]+"' >/dev/null 2>&1; then
+    echo "" >&2
+    echo "❌ [Pre-Commit] Commit aborted! .zshrc contains a non-empty LOCAL_SERVER_API_KEY." >&2
+    echo "   The .gitattributes clean-filter should keep this empty in Git." >&2
+    exit 1
+fi
+
+# 2. Gitleaks scan for secrets in staged changes
+if command -v gitleaks >/dev/null 2>&1; then
+    if ! gitleaks protect --staged --verbose; then
+        echo "" >&2
+        echo "❌ [Gitleaks] Commit aborted! Potential secrets or credentials detected in staged changes." >&2
+        echo "   If this is a confirmed false positive, you can configure .gitleaksignore or bypass with --no-verify." >&2
+        exit 1
+    fi
+fi

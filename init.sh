@@ -22,17 +22,39 @@ esac
 
 echo "Platform: $PLATFORM, Architecture: $DETECTED_ARCH"
 
+# Sudo Privilege Escalation & Keep-alive (Ubuntu / Linux)
+if [[ "$PLATFORM" == "ubuntu" ]]; then
+    if [[ $EUID -ne 0 ]]; then
+        echo "==> Validating sudo credentials upfront (prompted only once)..."
+        sudo -v
+
+        # Keep-alive: update existing sudo timestamp in background until script finishes
+        while true; do
+            sudo -n true
+            sleep 60
+            kill -0 "$$" || exit
+        done 2>/dev/null &
+        SUDO_KEEPALIVE_PID=$!
+        trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+        echo "==> Sudo credentials verified and keep-alive active."
+    fi
+fi
+
 # ------------------------------------------------------------------------------
 # 2. Create Dotfiles Symlinks
 # ------------------------------------------------------------------------------
 echo "==> [2/8] Creating dotfiles symlinks..."
 mkdir -p "$HOME/.config"
-mkdir -p "$HOME/.config/git"
+mkdir -p "$HOME/.config/git/hooks"
+mkdir -p "$HOME/.config/opencode"
 ln -snf "$REPO_ROOT/.tmux.conf" "$HOME/.tmux.conf"
 ln -snf "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
 ln -snf "$REPO_ROOT/.config/nvim" "$HOME/.config/nvim"
 ln -snf "$REPO_ROOT/.config/git/ignore" "$HOME/.config/git/ignore"
-echo "Symlinks created (.tmux.conf, .zshrc, .config/nvim, .config/git/ignore)"
+ln -snf "$REPO_ROOT/.config/git/hooks/pre-commit" "$HOME/.config/git/hooks/pre-commit"
+chmod +x "$REPO_ROOT/.config/git/hooks/pre-commit" "$HOME/.config/git/hooks/pre-commit" 2>/dev/null || true
+ln -snf "$REPO_ROOT/.config/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+echo "Symlinks created (.tmux.conf, .zshrc, .config/nvim, .config/git, .config/opencode/opencode.jsonc)"
 
 # ------------------------------------------------------------------------------
 # 3. Install Base Packages via Package Manager (APT / Homebrew)
@@ -68,7 +90,8 @@ elif [[ "$PLATFORM" == "macos" ]]; then
     echo "Installing macOS packages via Homebrew..."
     brew install \
         tmux bat universal-ctags unzip ripgrep fd thefuck cmatrix tree gh \
-        neovim helm kubernetes-cli go git-delta fzf zoxide node@22 tree-sitter-cli
+        neovim helm kubernetes-cli go git-delta fzf zoxide node@22 tree-sitter-cli \
+        gitleaks pre-commit
 fi
 
 # ------------------------------------------------------------------------------
@@ -112,6 +135,20 @@ else
 fi
 export PATH="$HOME/.bun/bin:$PATH"
 
+if ! command -v opencode >/dev/null 2>&1; then
+    echo "Installing opencode via npm..."
+    npm install -g opencode-ai
+else
+    echo "opencode is already installed."
+fi
+
+if ! command -v omo >/dev/null 2>&1; then
+    echo "Installing omo-ai via npm..."
+    npm install -g omo-ai
+else
+    echo "omo is already installed."
+fi
+
 # ------------------------------------------------------------------------------
 # 5. Install git-delta
 # ------------------------------------------------------------------------------
@@ -134,6 +171,27 @@ if [[ "$PLATFORM" == "ubuntu" ]]; then
     fi
 else
     echo "macOS: git-delta is already installed via Homebrew."
+fi
+
+# Gitleaks for Ubuntu (macOS installed via Homebrew)
+if [[ "$PLATFORM" == "ubuntu" ]]; then
+    if ! command -v gitleaks >/dev/null 2>&1; then
+        echo "Ubuntu: Downloading and installing gitleaks from GitHub releases..."
+        GITLEAKS_ARCH="$(dpkg --print-architecture 2>/dev/null || uname -m)"
+        case "$GITLEAKS_ARCH" in
+            amd64|x86_64) GITLEAKS_ARCH="x64" ;;
+            arm64|aarch64) GITLEAKS_ARCH="arm64" ;;
+            *) echo "Unsupported architecture for gitleaks: $GITLEAKS_ARCH" >&2; exit 1 ;;
+        esac
+        GITLEAKS_VERSION="8.30.1"
+        GITLEAKS_TAR="$(mktemp --suffix=.tar.gz)"
+        curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_${GITLEAKS_ARCH}.tar.gz" -o "$GITLEAKS_TAR"
+        sudo tar -xzf "$GITLEAKS_TAR" -C /usr/local/bin gitleaks
+        sudo chmod +x /usr/local/bin/gitleaks
+        rm -f "$GITLEAKS_TAR"
+    else
+        echo "gitleaks is already installed."
+    fi
 fi
 
 # ------------------------------------------------------------------------------
@@ -199,8 +257,11 @@ echo "==> [8/8] Configuring Git, GitHub CLI, Kubectl, and Neovim..."
 # Git config
 git config --global core.editor nvim
 git config --global core.excludesfile "$HOME/.config/git/ignore"
+git config --global core.hooksPath "$HOME/.config/git/hooks"
 git config --global merge.conflictstyle diff3
 git config --global diff.colorMoved default
+git config --global filter.clean-secrets.clean "sed -E 's/^(export LOCAL_SERVER_API_KEY=\")[^\"]*(\")/\1\2/'"
+git config --global filter.clean-secrets.smudge "cat"
 if command -v delta >/dev/null 2>&1; then
     git config --global core.pager delta
     git config --global interactive.diffFilter 'delta --color-only'
@@ -227,6 +288,18 @@ fi
 if command -v nvim >/dev/null 2>&1; then
     echo "Updating Neovim plugins via Lazy..."
     nvim --headless "+Lazy! update" +qa || true
+fi
+
+# Local Server API Key setup (stored locally in .zshrc, sanitized upon Git commit via clean-filter)
+if grep -q 'export LOCAL_SERVER_API_KEY=""' "$REPO_ROOT/.zshrc" 2>/dev/null; then
+    if [[ -t 0 ]]; then
+        read -rsp "Enter Local Server API Key (saved into local .zshrc, automatically sanitized on commit): " INPUT_KEY
+        echo ""
+        if [[ -n "$INPUT_KEY" ]]; then
+            sed -i "s|^export LOCAL_SERVER_API_KEY=\"\"|export LOCAL_SERVER_API_KEY=\"$INPUT_KEY\"|" "$REPO_ROOT/.zshrc"
+            echo "Local Server API Key configured in .zshrc."
+        fi
+    fi
 fi
 
 echo "==> All setup steps completed successfully!"

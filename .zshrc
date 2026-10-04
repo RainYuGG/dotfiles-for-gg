@@ -206,6 +206,9 @@ bindkey "^[[4~" end-of-line
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
+# Local Server API Key (automatically sanitized to empty string upon Git commit via .gitattributes clean filter)
+export LOCAL_SERVER_API_KEY=""
+
 if [[ -r "$HOME/.p10k.zsh" ]]; then
   source "$HOME/.p10k.zsh"
 fi
