@@ -1,0 +1,2 @@
+# Automatically clean sensitive credentials from .zshrc on commit
+.zshrc filter=clean-secrets
